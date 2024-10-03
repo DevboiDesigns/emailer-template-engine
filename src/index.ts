@@ -5,7 +5,7 @@ import SendGrid from './libs/sendgrid.lib'
 // Send Email Type
 type SendEmailType = 'dev' | 'team' | 'prod'
 
-class SLEmailer {
+class EmailerEngine {
   singleEmail = 'chrisdevenv@gmail.com'
   smallBatch: string[] = []
   largeBatch: string[] = []
@@ -68,13 +68,15 @@ class SLEmailer {
   }
 }
 
-export { SLEmailer, EmailTemplates, SendGrid }
+export { EmailerEngine, EmailTemplates, SendGrid }
 
 //* ---- SEND EMAIL TEST ----
-// import SendGrid from "./libs/sendgrid.lib"
-// const t = async () => {
-//   const service = new SLEmailer(SendGrid)
-//   // service.devEmail = "test@test.com"
-// service.send("dev", await EmailTemplates.getTemplate001())
-// }
-// t()
+const t = async () => {
+  const service = new EmailerEngine(SendGrid)
+  service.singleEmail = 'test@test.com'
+  service.smallBatch = ['test@test.com']
+  // Intended for amounts over 1000
+  service.largeBatch = ['test@test.com']
+  service.send('dev', await EmailTemplates.getTemplate001())
+}
+t()
