@@ -1,6 +1,6 @@
 {
   "name": "@devboidesigns/emailer-template-engine",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An email template engine for designing and sending html emails",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
