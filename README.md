@@ -25,4 +25,54 @@ The template engine uses [mjml](https://mjml.io) views and [handlebars](https://
    - set injected properties
    - return html
 
+**Example Template**
+
+```ts
+static getTemplate001 = async () => {
+    const subject = `Free Advice Market Features`
+    // set the file path to the mjml template to be sent
+    let FILEPATH = 'src/templates/template_001.mjml'
+    // mjml template file path
+    const view = fs.readFileSync(FILEPATH, 'utf8')
+    // Compile the template
+    const template = compile(view)
+    // Content to be injected into the template
+    const context = {
+      offerInfo: '* Offer valid for a limited time',
+      bodyMessage: 'Questions & Consultations are now Free!',
+      bodyHeader: 'Advice Market',
+      titleMessage: 'StockLift',
+      bodySubMessage: 'It has never been faster to connect with an Expert',
+    }
+    // Render the template with the context
+    const mjml = template(context)
+    // Convert mjml to html
+    const html = mjml2html(mjml)
+    if (html.errors.length) {
+      console.error(html.errors)
+    }
+    // Return the html and the TITLE of the email
+    return { html: html.html, subject }
+  }
+```
+
 ## Sending an Email
+
+There are 3 different ways to send an email:
+
+- `dev`
+- `team`
+- `prod`
+
+1. Create an EmailerEngine Object with the provided SendGrid object or one that conforms to [SendGridType](/Users/devboi/GitHub/emailer-template-engine/src/model/sendgrid.interface.ts)`sendgrid.interface.ts`
+2. Set the emails to send to
+3. Send!
+
+```ts
+const service = new EmailerEngine(SendGrid)
+service.singleEmail = 'test@test.com'
+service.smallBatch = ['test@test.com']
+// Intended for amounts over 1000
+service.largeBatch = ['test@test.com']
+service.send('dev', await EmailTemplates.getTemplate001())
+```
