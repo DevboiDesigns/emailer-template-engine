@@ -1,13 +1,13 @@
-abstract class ISendGrid {
-  static sendMultipleEmails: (
+abstract class SendGridType {
+  static sendSmallBatch: (
     emails: string[],
     subject: string,
-    html: string
+    html: string,
   ) => Promise<void>
-  static sendEmail: (
+  static sendSingleEmail: (
     email: string,
     subject: string,
-    html: string
+    html: string,
   ) => Promise<void>
   static sendEmailWAttachment: (
     email: string,
@@ -15,12 +15,12 @@ abstract class ISendGrid {
     html: string,
     attachment: string,
     fileName: string,
-    fileType: string
+    fileType: string,
   ) => Promise<void>
-  static sendToAllUsers: (
+  static sendLargeBatch: (
     subject: string,
     html: string,
-    emails: string[]
+    emails: string[],
   ) => Promise<void>
   static makeEmailWithAttachment: (
     email: string,
@@ -28,7 +28,7 @@ abstract class ISendGrid {
     html: string,
     attachment: string,
     fileName: string,
-    fileType: string
+    fileType: string,
   ) => {
     to: string
     from: string
@@ -45,7 +45,7 @@ abstract class ISendGrid {
   static makeEmail: (
     email: string,
     subject: string,
-    html: string
+    html: string,
   ) => {
     to: string
     from: string
@@ -56,7 +56,7 @@ abstract class ISendGrid {
   static makeEmails: (
     emails: string[],
     subject: string,
-    html: string
+    html: string,
   ) => {
     to: string[]
     from: string
@@ -66,4 +66,4 @@ abstract class ISendGrid {
   }
 }
 
-export default ISendGrid
+export default SendGridType

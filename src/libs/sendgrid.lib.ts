@@ -1,13 +1,13 @@
 import sendgrid from '../config/sendgrid'
-import ISendGrid from '../model/sendgrid.interface'
+import SendGridType from '../model/sendgrid.interface'
 import _ from 'lodash'
 
 //* SENDGRID LIMITS TO 1000 EMAILS PER Request
-export default class SendGrid implements ISendGrid {
+export default class SendGrid implements SendGridType {
   // ---------------- FROM EMAIL
   static fromEmail = 'visrule@pm.me'
   //* MULTLIPLE EMAILS
-  static sendMultipleEmails = async (
+  static sendSmallBatch = async (
     emails: string[],
     subject: string,
     html: string,
@@ -19,16 +19,22 @@ export default class SendGrid implements ISendGrid {
     } catch (err) {
       console.error(err)
       console.error('Error sending multiple emails')
+      throw new Error('Error sending multiple emails')
     }
   }
 
   //* SINGLE EMAIL
-  static sendEmail = async (email: string, subject: string, html: string) => {
+  static sendSingleEmail = async (
+    email: string,
+    subject: string,
+    html: string,
+  ) => {
     try {
       await sendgrid.send(SendGrid.makeEmail(email, subject, html))
     } catch (err) {
       console.error(err)
       console.error('Error sending email-sendEmail')
+      throw new Error('Error sending email-sendEmail')
     }
   }
 
@@ -55,10 +61,11 @@ export default class SendGrid implements ISendGrid {
     } catch (err) {
       console.error(err)
       console.error('Error sending email--sendEmailWAttachment')
+      throw new Error('Error sending email--sendEmailWAttachment')
     }
   }
 
-  static sendToAllUsers = async (
+  static sendLargeBatch = async (
     subject: string,
     html: string,
     emails: string[],

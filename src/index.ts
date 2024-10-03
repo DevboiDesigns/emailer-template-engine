@@ -1,4 +1,4 @@
-import ISendGrid from './model/sendgrid.interface'
+import SendGridType from './model/sendgrid.interface'
 import EmailTemplates from './templates'
 import SendGrid from './libs/sendgrid.lib'
 
@@ -6,11 +6,11 @@ import SendGrid from './libs/sendgrid.lib'
 type SendEmailType = 'dev' | 'team' | 'prod'
 
 class SLEmailer {
-  devEmail = 'chrisdevenv@gmail.com'
-  teamEmails: string[] = []
-  prodEmails: string[] = []
+  singleEmail = 'chrisdevenv@gmail.com'
+  smallBatch: string[] = []
+  largeBatch: string[] = []
   // typeof ISendGrid to use static methods
-  constructor(readonly service: typeof ISendGrid = SendGrid) {}
+  constructor(readonly service: typeof SendGridType = SendGrid) {}
 
   ///* ----------------- SEND EMAIL ----------------- */
   /// -----------------------------------------------
@@ -18,47 +18,52 @@ class SLEmailer {
     sendType: SendEmailType,
     template: {
       html: string
-      title: string
+      subject: string
     },
   ) => {
-    switch (sendType) {
-      case 'team':
-        // ---------------- SEND MULTIPLE TEST EMAILS ----------------
-        const emails = this.teamEmails
+    try {
+      switch (sendType) {
+        case 'team':
+          // ---------------- SEND MULTIPLE TEST EMAILS ----------------
+          const emails = this.smallBatch
 
-        await this.service.sendMultipleEmails(
-          emails,
-          template.title,
-          template.html,
-        )
-        console.log('Emails sent')
-        break
-      case 'dev':
-        // ---------------- SEND ONE EMAIL ----------------
-        await this.service.sendEmail(
-          this.devEmail,
-          template.title,
-          template.html,
-        )
-        console.log('Email sent')
-        break
-      case 'prod':
-        // ---------------- SEND ALL EMAILS ----------------
-        try {
-          await this.service.sendToAllUsers(
-            template.title,
+          await this.service.sendSmallBatch(
+            emails,
+            template.subject,
             template.html,
-            this.prodEmails,
           )
-        } catch (err) {
-          console.log('Error sending emails')
-          console.log(err)
-        }
-        console.log('Emails sent')
-        break
-      default:
-        console.log('Invalid sendType')
-        break
+          console.log('Emails sent')
+          break
+        case 'dev':
+          // ---------------- SEND ONE EMAIL ----------------
+          await this.service.sendSingleEmail(
+            this.singleEmail,
+            template.subject,
+            template.html,
+          )
+          console.log('Email sent')
+          break
+        case 'prod':
+          // ---------------- SEND ALL EMAILS ----------------
+          try {
+            await this.service.sendLargeBatch(
+              template.subject,
+              template.html,
+              this.largeBatch,
+            )
+          } catch (err) {
+            console.log('Error sending emails')
+            console.log(err)
+          }
+          console.log('Emails sent')
+          break
+        default:
+          console.log('Invalid sendType')
+          break
+      }
+    } catch (err) {
+      console.log(err)
+      return err
     }
   }
 }
@@ -70,6 +75,6 @@ export { SLEmailer, EmailTemplates, SendGrid }
 // const t = async () => {
 //   const service = new SLEmailer(SendGrid)
 //   // service.devEmail = "test@test.com"
-//   service.send("dev", await EmailTemplates.getTemplate001())
+// service.send("dev", await EmailTemplates.getTemplate001())
 // }
 // t()
