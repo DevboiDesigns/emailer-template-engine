@@ -1,4 +1,4 @@
-name: Publish package to GitHub npm registry
+name: Publish to GitHub npm registry
 on:
   release:
     types: [published]
