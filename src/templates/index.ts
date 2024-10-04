@@ -23,15 +23,15 @@ export default class EmailTemplates {
   // Advice Market - Questions and Consultation are now free
   // Black background with white text and blue button that opens the app
   static getTemplate001 = async () => {
-    const subject = `Free Advice Market Features`
+    const subject = `My Subject Line`
     // Compile the template
     const template = loadviewfromfile('template_001.mjml')
     // Content to be injected into the template
     const context = {
       offerInfo: '* Offer valid for a limited time',
-      bodyMessage: 'Questions & Consultations are now Free!',
-      bodyHeader: 'Advice Market',
-      titleMessage: 'StockLift',
+      bodyMessage: 'New Features are now free!',
+      bodyHeader: 'Market',
+      titleMessage: 'TripAdvisor',
       bodySubMessage: 'It has never been faster to connect with an Expert',
     }
     // Render the template with the context

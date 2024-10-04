@@ -8,7 +8,7 @@ This is a dynamic template email engine. You can design html ([mjml](https://mjm
 
 1. clone repo
 2. `npm i`
-3. `cp .env.example .env` 
+3. `cp .env.example .env`
 4. Create a SendGrid account and obtain API key
 5. Run
 
@@ -29,20 +29,16 @@ The template engine uses [mjml](https://mjml.io) views and [handlebars](https://
 **Example Template**
 
 ```ts
-static getTemplate001 = async () => {
-    const subject = `Free Advice Market Features`
-    // set the file path to the mjml template to be sent
-    let FILEPATH = 'src/templates/template_001.mjml'
-    // mjml template file path
-    const view = fs.readFileSync(FILEPATH, 'utf8')
+  static getTemplate001 = async () => {
+    const subject = `My Subject Line`
     // Compile the template
-    const template = compile(view)
+    const template = loadviewfromfile('template_001.mjml')
     // Content to be injected into the template
     const context = {
       offerInfo: '* Offer valid for a limited time',
-      bodyMessage: 'Questions & Consultations are now Free!',
-      bodyHeader: 'Advice Market',
-      titleMessage: 'StockLift',
+      bodyMessage: 'New Features are now free!',
+      bodyHeader: 'Market',
+      titleMessage: 'TripAdvisor',
       bodySubMessage: 'It has never been faster to connect with an Expert',
     }
     // Render the template with the context
@@ -52,7 +48,7 @@ static getTemplate001 = async () => {
     if (html.errors.length) {
       console.error(html.errors)
     }
-    // Return the html and the TITLE of the email
+    // Return the html and the subject of the email
     return { html: html.html, subject }
   }
 ```
