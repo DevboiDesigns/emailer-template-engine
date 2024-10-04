@@ -126,7 +126,7 @@ var require_main = __commonJS({
   "node_modules/dotenv/lib/main.js"(exports, module) {
     "use strict";
     var fs2 = __require("fs");
-    var path = __require("path");
+    var path2 = __require("path");
     var os = __require("os");
     var crypto = __require("crypto");
     var packageJson = require_package();
@@ -240,7 +240,7 @@ var require_main = __commonJS({
           possibleVaultPath = options.path.endsWith(".vault") ? options.path : `${options.path}.vault`;
         }
       } else {
-        possibleVaultPath = path.resolve(process.cwd(), ".env.vault");
+        possibleVaultPath = path2.resolve(process.cwd(), ".env.vault");
       }
       if (fs2.existsSync(possibleVaultPath)) {
         return possibleVaultPath;
@@ -248,7 +248,7 @@ var require_main = __commonJS({
       return null;
     }
     function _resolveHome(envPath) {
-      return envPath[0] === "~" ? path.join(os.homedir(), envPath.slice(1)) : envPath;
+      return envPath[0] === "~" ? path2.join(os.homedir(), envPath.slice(1)) : envPath;
     }
     function _configVault(options) {
       _log("Loading env from encrypted .env.vault");
@@ -261,7 +261,7 @@ var require_main = __commonJS({
       return { parsed };
     }
     function configDotenv(options) {
-      const dotenvPath = path.resolve(process.cwd(), ".env");
+      const dotenvPath = path2.resolve(process.cwd(), ".env");
       let encoding = "utf8";
       const debug = Boolean(options && options.debug);
       if (options && options.encoding) {
@@ -284,13 +284,13 @@ var require_main = __commonJS({
       }
       let lastError;
       const parsedAll = {};
-      for (const path2 of optionPaths) {
+      for (const path3 of optionPaths) {
         try {
-          const parsed = DotenvModule.parse(fs2.readFileSync(path2, { encoding }));
+          const parsed = DotenvModule.parse(fs2.readFileSync(path3, { encoding }));
           DotenvModule.populate(parsedAll, parsed, options);
         } catch (e) {
           if (debug) {
-            _debug(`Failed to load ${path2} ${e.message}`);
+            _debug(`Failed to load ${path3} ${e.message}`);
           }
           lastError = e;
         }
@@ -393,9 +393,29 @@ var require_main = __commonJS({
 import fs from "fs";
 import handleBars from "handlebars";
 import mjml2html from "mjml";
+import path from "node:path";
 import { promisify } from "util";
 var { compile } = handleBars;
 var readFilep = promisify(fs.readFile);
+function loadview(filename = "template_001.mjml") {
+  return __async(this, null, function* () {
+    var _a, _b;
+    const fullPath = path.join(__dirname, filename);
+    const configPath = path.resolve(
+      path.dirname(((_a = __require.main) == null ? void 0 : _a.filename) || ""),
+      filename
+    );
+    console.log(`DIR name: ${(_b = __require.main) == null ? void 0 : _b.filename}`);
+    console.log(`PathToFile: ${`src/templates/${filename}`}`);
+    console.log(`ConfigPath: ${configPath}`);
+    console.log(`Fullpath: ${fullPath}`);
+    try {
+      return fs.readFileSync(fullPath, "utf8");
+    } catch (err) {
+      console.log(err);
+    }
+  });
+}
 var _EmailTemplates = class _EmailTemplates {
 };
 //**** ------- TEMPLATE 001 ------- ****
@@ -404,8 +424,7 @@ var _EmailTemplates = class _EmailTemplates {
 // htmlTemplate001 = AMTemplate.getTemplate001()
 _EmailTemplates.getTemplate001 = () => __async(_EmailTemplates, null, function* () {
   const subject = `Free Advice Market Features`;
-  let FILEPATH = "src/templates/template_001.mjml";
-  const view = fs.readFileSync(FILEPATH, "utf8");
+  const view = yield loadview("template_001.mjml");
   const template = compile(view);
   const context = {
     offerInfo: "* Offer valid for a limited time",
@@ -422,6 +441,7 @@ _EmailTemplates.getTemplate001 = () => __async(_EmailTemplates, null, function* 
   return { html: html.html, subject };
 });
 var EmailTemplates = _EmailTemplates;
+EmailTemplates.getTemplate001();
 
 // src/config/env.keys.ts
 var import_dotenv = __toESM(require_main());
@@ -452,7 +472,6 @@ _SendGrid.sendSmallBatch = (emails, subject, html) => __async(_SendGrid, null, f
 //* SINGLE EMAIL
 _SendGrid.sendSingleEmail = (email, subject, html) => __async(_SendGrid, null, function* () {
   try {
-    yield sendgrid_default.send(_SendGrid.makeEmail(email, subject, html));
   } catch (err) {
     console.error(err);
     console.error("Error sending email-sendEmail");
@@ -533,7 +552,7 @@ _SendGrid.makeEmails = (emails, subject, html) => {
 var SendGrid = _SendGrid;
 
 // src/index.ts
-var SLEmailer = class {
+var EmailerEngine = class {
   // typeof ISendGrid to use static methods
   constructor(service = SendGrid) {
     this.service = service;
@@ -545,7 +564,7 @@ var SLEmailer = class {
     this.send = (sendType, template) => __async(this, null, function* () {
       try {
         switch (sendType) {
-          case "team":
+          case "many":
             const emails = this.smallBatch;
             yield this.service.sendSmallBatch(
               emails,
@@ -554,7 +573,7 @@ var SLEmailer = class {
             );
             console.log("Emails sent");
             break;
-          case "dev":
+          case "one":
             yield this.service.sendSingleEmail(
               this.singleEmail,
               template.subject,
@@ -562,7 +581,7 @@ var SLEmailer = class {
             );
             console.log("Email sent");
             break;
-          case "prod":
+          case "all":
             try {
               yield this.service.sendLargeBatch(
                 template.subject,
@@ -586,9 +605,15 @@ var SLEmailer = class {
     });
   }
 };
+var t = () => __async(void 0, null, function* () {
+  const service = new EmailerEngine(SendGrid);
+  service.singleEmail = "test@test.com";
+  service.send("one", yield EmailTemplates.getTemplate001());
+});
+t();
 export {
   EmailTemplates,
-  SLEmailer,
+  EmailerEngine,
   SendGrid
 };
 //# sourceMappingURL=index.mjs.map

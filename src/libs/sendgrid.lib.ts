@@ -30,7 +30,7 @@ export default class SendGrid implements SendGridType {
     html: string,
   ) => {
     try {
-      await sendgrid.send(SendGrid.makeEmail(email, subject, html))
+      // await sendgrid.send(SendGrid.makeEmail(email, subject, html))
     } catch (err) {
       console.error(err)
       console.error('Error sending email-sendEmail')

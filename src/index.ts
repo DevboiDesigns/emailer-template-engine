@@ -3,7 +3,7 @@ import EmailTemplates from './templates'
 import SendGrid from './libs/sendgrid.lib'
 
 // Send Email Type
-type SendEmailType = 'dev' | 'team' | 'prod'
+type SendEmailType = 'one' | 'many' | 'all'
 
 class EmailerEngine {
   singleEmail = 'chrisdevenv@gmail.com'
@@ -23,7 +23,7 @@ class EmailerEngine {
   ) => {
     try {
       switch (sendType) {
-        case 'team':
+        case 'many':
           // ---------------- SEND MULTIPLE TEST EMAILS ----------------
           const emails = this.smallBatch
 
@@ -34,7 +34,7 @@ class EmailerEngine {
           )
           console.log('Emails sent')
           break
-        case 'dev':
+        case 'one':
           // ---------------- SEND ONE EMAIL ----------------
           await this.service.sendSingleEmail(
             this.singleEmail,
@@ -43,7 +43,7 @@ class EmailerEngine {
           )
           console.log('Email sent')
           break
-        case 'prod':
+        case 'all':
           // ---------------- SEND ALL EMAILS ----------------
           try {
             await this.service.sendLargeBatch(
@@ -74,9 +74,8 @@ export { EmailerEngine, EmailTemplates, SendGrid }
 const t = async () => {
   const service = new EmailerEngine(SendGrid)
   service.singleEmail = 'test@test.com'
-  service.smallBatch = ['test@test.com']
-  // Intended for amounts over 1000
-  service.largeBatch = ['test@test.com']
-  service.send('dev', await EmailTemplates.getTemplate001())
+  // service.smallBatch = ['test@test.com']
+  // service.largeBatch = ['test@test.com']   // Intended for amounts over 1000
+  service.send('one', await EmailTemplates.getTemplate001())
 }
 t()

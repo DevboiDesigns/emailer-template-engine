@@ -8,8 +8,9 @@ This is a dynamic template email engine. You can design html ([mjml](https://mjm
 
 1. clone repo
 2. `npm i`
-3. `cp .env.example .env` - fill in SendGrid API Key
-4. Run
+3. `cp .env.example .env` 
+4. Create a SendGrid account and obtain API key
+5. Run
 
 # Emails
 
@@ -60,9 +61,9 @@ static getTemplate001 = async () => {
 
 There are 3 different ways to send an email:
 
-- `dev`
-- `team`
-- `prod`
+- `one`
+- `many`
+- `all`
 
 1. Create an EmailerEngine Object with the provided SendGrid object or one that conforms to [SendGridType](/Users/devboi/GitHub/emailer-template-engine/src/model/sendgrid.interface.ts)`sendgrid.interface.ts`
 2. Set the emails to send to

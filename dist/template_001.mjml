@@ -1,0 +1,173 @@
+<mjml>
+  <mj-body background-color="#00ADF1">
+    <!-- TOP HEADER SECTION -->
+    <mj-section
+      background-color="#000000"
+      background-repeat="no-repeat"
+      text-align="center"
+    >
+      <mj-column>
+        <mj-text
+          align="left"
+          color="#55575d"
+          font-family="Arial, sans-serif"
+          font-size="13px"
+          line-height="22px"
+          padding-bottom="0px"
+          padding-top="0px"
+          padding="10px 25px"
+        >
+          <p
+            style="
+              line-height: 18px;
+              margin: 10px 0;
+              text-align: center;
+              font-size: 10px;
+              color: #ffffff;
+              font-family: 'Times New Roman', Helvetica, Arial, sans-serif;
+            "
+          >
+            QUESTIONS&nbsp; &nbsp; &nbsp; &nbsp;| &nbsp; &nbsp; &nbsp;
+            PLANS&nbsp; &nbsp; &nbsp; &nbsp;| &nbsp; &nbsp; &nbsp; CONSULTATIONS
+          </p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <!-- TITLE SECTION -->
+    <mj-section
+      background-color="#000000"
+      background-repeat="no-repeat"
+      text-align="center"
+      padding="0 0 0 0"
+    >
+      <mj-column>
+        <mj-image
+          align="center"
+          border="none"
+          padding-bottom="30px"
+          padding="10px 25px"
+          src="https://storage.googleapis.com/sl_prod_public_bucket/sllogo.transparent.png"
+          target="_blank"
+          title=""
+          width="100px"
+        ></mj-image>
+        <!-- <mj-image src="./src/public/img/logo.png"> </mj-image> -->
+        <!-- <mj-text
+          align="left"
+          color="#55575d"
+          font-family="Arial, sans-serif"
+          font-size="13px"
+          line-height="22px"
+          padding-bottom="5px"
+          padding-top="25px"
+          padding="10px 25px"
+        >
+          <p
+            style="
+              line-height: 60px;
+              text-align: center;
+              margin: 10px 0;
+              font-size: 55px;
+              color: #fcfcfc;
+              font-family: 'Times New Roman', Helvetica, Arial, sans-serif;
+            "
+          >
+            <b>{{titleMessage}}</b>
+          </p>
+        </mj-text> -->
+        <mj-text
+          align="left"
+          color="#55575d"
+          font-family="Arial, sans-serif"
+          font-size="13px"
+          line-height="22px"
+          padding-bottom="20px"
+          padding-top="0px"
+          padding="10px 25px"
+        >
+          <p
+            style="
+              line-height: 30px;
+              text-align: center;
+              margin: 10px 0;
+              color: #f5f5f5;
+              font-size: 25px;
+              font-family: 'Times New Roman', Helvetica, Arial, sans-serif;
+            "
+          >
+            <b>{{bodyHeader}}</b><br />
+            <span
+              style="
+                color: #ffffff;
+                font-size: 18px;
+                font-family: 'Times New Roman', Helvetica, Arial, sans-serif;
+              "
+              >Questions & Consultations are now <b>Free</b>!</span
+            >
+            <br />
+            <span
+              style="
+                color: #ffffff;
+                font-size: 18px;
+                font-family: 'Times New Roman', Helvetica, Arial, sans-serif;
+              "
+              >{{bodySubMessage}}</span
+            >
+          </p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section
+      background-color="#000000"
+      background-repeat="no-repeat"
+      text-align="center"
+      padding-bottom="40px"
+      padding="0 0 0 0"
+    >
+      <mj-column>
+        <mj-button
+          background-color="#00ADF1"
+          border-radius="8px"
+          font-family="Times New Roman, Helvetica, Arial, sans-serif"
+          font-size="18px"
+          font-weight="normal"
+          inner-padding="10px 25px"
+          padding-bottom="30px"
+          padding="10px 25px"
+        >
+          <a
+            href="https://stock-lift-inc.herokuapp.com/open_app"
+            target="_blank"
+            style="color: #212020; text-decoration: none"
+          >
+            <!-- <mj-text> Try it now </mj-text> -->
+            <span style="color: #212020">Try it now</span>
+          </a>
+        </mj-button>
+        <mj-text
+          align="left"
+          color="#55575d"
+          font-family="Arial, sans-serif"
+          font-size="13px"
+          line-height="22px"
+          padding-bottom="0px"
+          padding-top="5px"
+          padding="10px 25px"
+        >
+          <p
+            style="
+              line-height: 16px;
+              text-align: center;
+              margin: 10px 0;
+              font-size: 12px;
+              color: #ffffff;
+              font-family: 'Times New Roman', Helvetica, Arial, sans-serif;
+            "
+          >
+            {{offerInfo}}
+          </p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

@@ -5,24 +5,29 @@ import mjml2html from 'mjml'
 
 //TODO: resolve path to file for npm package architecture
 
-import path from 'path'
+import path from 'node:path'
 import { promisify } from 'util'
 const readFilep = promisify(fs.readFile)
 
-async function loadConfig(filename = 'template_001.mjml') {
+async function loadview(filename = 'template_001.mjml') {
+  const fullPath = path.join(__dirname, filename)
   const configPath = path.resolve(
     path.dirname(require.main?.filename || ''),
     filename,
   )
+  console.log(`DIR name: ${require.main?.filename}`)
+  console.log(`PathToFile: ${`src/templates/${filename}`}`)
+  console.log(`ConfigPath: ${configPath}`)
+  console.log(`Fullpath: ${fullPath}`)
   try {
-    try {
-      const data = await readFilep(configPath, 'utf8')
-      return data
-      return JSON.parse(data)
-    } catch (err) {
-      console.log(err)
-    }
-    // return fs.readFileSync(configPath, "utf8")
+    // try {
+    //   const data = await readFilep(configPath, 'utf8')
+    //   return data
+    //   return JSON.parse(data)
+    // } catch (err) {
+    //   console.log(err)
+    // }
+    return fs.readFileSync(fullPath, 'utf8')
     // return JSON.parse(data)
   } catch (err) {
     console.log(err)
@@ -37,11 +42,11 @@ export default class EmailTemplates {
   static getTemplate001 = async () => {
     const subject = `Free Advice Market Features`
     // set the file path to the mjml template to be sent
-    let FILEPATH = 'src/templates/template_001.mjml'
+    // let FILEPATH = 'src/templates/template_001.mjml'
     // let FILEPATH = "./template_001.mjml"
     // mjml template file path
-    // const view = await loadConfig()
-    const view = fs.readFileSync(FILEPATH, 'utf8')
+    const view = await loadview('template_001.mjml')
+    // const view = fs.readFileSync(FILEPATH, 'utf8')
     // Compile the template
     const template = compile(view)
     // Content to be injected into the template
@@ -69,3 +74,5 @@ export default class EmailTemplates {
 //   console.log(r)
 // }
 // t()
+
+EmailTemplates.getTemplate001()
