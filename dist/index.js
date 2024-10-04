@@ -400,41 +400,29 @@ module.exports = __toCommonJS(src_exports);
 
 // src/templates/index.ts
 var import_fs = __toESM(require("fs"));
-var import_handlebars = __toESM(require("handlebars"));
-var import_mjml = __toESM(require("mjml"));
 var import_node_path = __toESM(require("path"));
-var import_util = require("util");
+var import_mjml = __toESM(require("mjml"));
+var import_handlebars = __toESM(require("handlebars"));
 var { compile } = import_handlebars.default;
-var readFilep = (0, import_util.promisify)(import_fs.default.readFile);
-function loadview(filename = "template_001.mjml") {
-  return __async(this, null, function* () {
-    var _a, _b;
-    const fullPath = import_node_path.default.join(__dirname, filename);
-    const configPath = import_node_path.default.resolve(
-      import_node_path.default.dirname(((_a = require.main) == null ? void 0 : _a.filename) || ""),
-      filename
-    );
-    console.log(`DIR name: ${(_b = require.main) == null ? void 0 : _b.filename}`);
-    console.log(`PathToFile: ${`src/templates/${filename}`}`);
-    console.log(`ConfigPath: ${configPath}`);
-    console.log(`Fullpath: ${fullPath}`);
-    try {
-      return import_fs.default.readFileSync(fullPath, "utf8");
-    } catch (err) {
-      console.log(err);
-    }
-  });
-}
+var loadviewfromfile = (filename) => {
+  const fullPath = import_node_path.default.join(__dirname, filename);
+  try {
+    const view = import_fs.default.readFileSync(fullPath, "utf8");
+    const template = compile(view);
+    return template;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
 var _EmailTemplates = class _EmailTemplates {
 };
 //**** ------- TEMPLATE 001 ------- ****
 // Advice Market - Questions and Consultation are now free
 // Black background with white text and blue button that opens the app
-// htmlTemplate001 = AMTemplate.getTemplate001()
 _EmailTemplates.getTemplate001 = () => __async(_EmailTemplates, null, function* () {
   const subject = `Free Advice Market Features`;
-  const view = yield loadview("template_001.mjml");
-  const template = compile(view);
+  const template = loadviewfromfile("template_001.mjml");
   const context = {
     offerInfo: "* Offer valid for a limited time",
     bodyMessage: "Questions & Consultations are now Free!",
@@ -450,7 +438,6 @@ _EmailTemplates.getTemplate001 = () => __async(_EmailTemplates, null, function* 
   return { html: html.html, subject };
 });
 var EmailTemplates = _EmailTemplates;
-EmailTemplates.getTemplate001();
 
 // src/config/env.keys.ts
 var import_dotenv = __toESM(require_main());
@@ -562,7 +549,6 @@ var SendGrid = _SendGrid;
 
 // src/index.ts
 var EmailerEngine = class {
-  // typeof ISendGrid to use static methods
   constructor(service = SendGrid) {
     this.service = service;
     this.singleEmail = "chrisdevenv@gmail.com";
@@ -614,12 +600,6 @@ var EmailerEngine = class {
     });
   }
 };
-var t = () => __async(void 0, null, function* () {
-  const service = new EmailerEngine(SendGrid);
-  service.singleEmail = "test@test.com";
-  service.send("one", yield EmailTemplates.getTemplate001());
-});
-t();
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   EmailTemplates,

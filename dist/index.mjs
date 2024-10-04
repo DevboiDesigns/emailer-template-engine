@@ -391,41 +391,29 @@ var require_main = __commonJS({
 
 // src/templates/index.ts
 import fs from "fs";
-import handleBars from "handlebars";
-import mjml2html from "mjml";
 import path from "node:path";
-import { promisify } from "util";
+import mjml2html from "mjml";
+import handleBars from "handlebars";
 var { compile } = handleBars;
-var readFilep = promisify(fs.readFile);
-function loadview(filename = "template_001.mjml") {
-  return __async(this, null, function* () {
-    var _a, _b;
-    const fullPath = path.join(__dirname, filename);
-    const configPath = path.resolve(
-      path.dirname(((_a = __require.main) == null ? void 0 : _a.filename) || ""),
-      filename
-    );
-    console.log(`DIR name: ${(_b = __require.main) == null ? void 0 : _b.filename}`);
-    console.log(`PathToFile: ${`src/templates/${filename}`}`);
-    console.log(`ConfigPath: ${configPath}`);
-    console.log(`Fullpath: ${fullPath}`);
-    try {
-      return fs.readFileSync(fullPath, "utf8");
-    } catch (err) {
-      console.log(err);
-    }
-  });
-}
+var loadviewfromfile = (filename) => {
+  const fullPath = path.join(__dirname, filename);
+  try {
+    const view = fs.readFileSync(fullPath, "utf8");
+    const template = compile(view);
+    return template;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
 var _EmailTemplates = class _EmailTemplates {
 };
 //**** ------- TEMPLATE 001 ------- ****
 // Advice Market - Questions and Consultation are now free
 // Black background with white text and blue button that opens the app
-// htmlTemplate001 = AMTemplate.getTemplate001()
 _EmailTemplates.getTemplate001 = () => __async(_EmailTemplates, null, function* () {
   const subject = `Free Advice Market Features`;
-  const view = yield loadview("template_001.mjml");
-  const template = compile(view);
+  const template = loadviewfromfile("template_001.mjml");
   const context = {
     offerInfo: "* Offer valid for a limited time",
     bodyMessage: "Questions & Consultations are now Free!",
@@ -441,7 +429,6 @@ _EmailTemplates.getTemplate001 = () => __async(_EmailTemplates, null, function* 
   return { html: html.html, subject };
 });
 var EmailTemplates = _EmailTemplates;
-EmailTemplates.getTemplate001();
 
 // src/config/env.keys.ts
 var import_dotenv = __toESM(require_main());
@@ -553,7 +540,6 @@ var SendGrid = _SendGrid;
 
 // src/index.ts
 var EmailerEngine = class {
-  // typeof ISendGrid to use static methods
   constructor(service = SendGrid) {
     this.service = service;
     this.singleEmail = "chrisdevenv@gmail.com";
@@ -605,12 +591,6 @@ var EmailerEngine = class {
     });
   }
 };
-var t = () => __async(void 0, null, function* () {
-  const service = new EmailerEngine(SendGrid);
-  service.singleEmail = "test@test.com";
-  service.send("one", yield EmailTemplates.getTemplate001());
-});
-t();
 export {
   EmailTemplates,
   EmailerEngine,

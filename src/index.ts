@@ -9,7 +9,7 @@ class EmailerEngine {
   singleEmail = 'chrisdevenv@gmail.com'
   smallBatch: string[] = []
   largeBatch: string[] = []
-  // typeof ISendGrid to use static methods
+
   constructor(readonly service: typeof SendGridType = SendGrid) {}
 
   ///* ----------------- SEND EMAIL ----------------- */
@@ -71,11 +71,11 @@ class EmailerEngine {
 export { EmailerEngine, EmailTemplates, SendGrid }
 
 //* ---- SEND EMAIL TEST ----
-const t = async () => {
-  const service = new EmailerEngine(SendGrid)
-  service.singleEmail = 'test@test.com'
-  // service.smallBatch = ['test@test.com']
-  // service.largeBatch = ['test@test.com']   // Intended for amounts over 1000
-  service.send('one', await EmailTemplates.getTemplate001())
-}
-t()
+// const t = async () => {
+//   const service = new EmailerEngine(SendGrid)
+//   service.singleEmail = 'test@test.com'
+//   // service.smallBatch = ['test@test.com']
+//   // service.largeBatch = ['test@test.com']   // Intended for amounts over 1000
+//   service.send('one', await EmailTemplates.getTemplate001())
+// }
+// t()

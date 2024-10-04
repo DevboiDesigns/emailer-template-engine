@@ -1,36 +1,20 @@
 import fs from 'fs'
+import path from 'node:path'
+import mjml2html from 'mjml'
 import handleBars from 'handlebars'
 const { compile } = handleBars
-import mjml2html from 'mjml'
 
-//TODO: resolve path to file for npm package architecture
-
-import path from 'node:path'
-import { promisify } from 'util'
-const readFilep = promisify(fs.readFile)
-
-async function loadview(filename = 'template_001.mjml') {
+const loadviewfromfile = (
+  filename: string,
+): HandlebarsTemplateDelegate<any> => {
   const fullPath = path.join(__dirname, filename)
-  const configPath = path.resolve(
-    path.dirname(require.main?.filename || ''),
-    filename,
-  )
-  console.log(`DIR name: ${require.main?.filename}`)
-  console.log(`PathToFile: ${`src/templates/${filename}`}`)
-  console.log(`ConfigPath: ${configPath}`)
-  console.log(`Fullpath: ${fullPath}`)
   try {
-    // try {
-    //   const data = await readFilep(configPath, 'utf8')
-    //   return data
-    //   return JSON.parse(data)
-    // } catch (err) {
-    //   console.log(err)
-    // }
-    return fs.readFileSync(fullPath, 'utf8')
-    // return JSON.parse(data)
+    const view = fs.readFileSync(fullPath, 'utf8')
+    const template = compile(view)
+    return template
   } catch (err) {
     console.log(err)
+    throw err
   }
 }
 
@@ -38,17 +22,10 @@ export default class EmailTemplates {
   //**** ------- TEMPLATE 001 ------- ****
   // Advice Market - Questions and Consultation are now free
   // Black background with white text and blue button that opens the app
-  // htmlTemplate001 = AMTemplate.getTemplate001()
   static getTemplate001 = async () => {
     const subject = `Free Advice Market Features`
-    // set the file path to the mjml template to be sent
-    // let FILEPATH = 'src/templates/template_001.mjml'
-    // let FILEPATH = "./template_001.mjml"
-    // mjml template file path
-    const view = await loadview('template_001.mjml')
-    // const view = fs.readFileSync(FILEPATH, 'utf8')
     // Compile the template
-    const template = compile(view)
+    const template = loadviewfromfile('template_001.mjml')
     // Content to be injected into the template
     const context = {
       offerInfo: '* Offer valid for a limited time',
@@ -64,15 +41,7 @@ export default class EmailTemplates {
     if (html.errors.length) {
       console.error(html.errors)
     }
-    // Return the html and the TITLE of the email
+    // Return the html and the subject of the email
     return { html: html.html, subject }
   }
 }
-
-// const t = async () => {
-//   const r = await loadConfig()
-//   console.log(r)
-// }
-// t()
-
-EmailTemplates.getTemplate001()
