@@ -16,7 +16,7 @@
     "url": "https://github.com/DevboiDesigns/emailer-template-engine.git"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && cp src/templates/*.mjml dist/",
     "test": "jest"
   },
   "author": "Christopher Hicks",
