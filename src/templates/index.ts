@@ -22,7 +22,7 @@ export default class EmailTemplates {
   //**** ------- TEMPLATE 001 ------- ****
   // Advice Market - Questions and Consultation are now free
   // Black background with white text and blue button that opens the app
-  static getTemplate001 = async () => {
+  static getTemplate001 = () => {
     const subject = `My Subject Line`
     // Compile the template
     const template = loadviewfromfile('template_001.mjml')

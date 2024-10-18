@@ -29,7 +29,7 @@ The template engine uses [mjml](https://mjml.io) views and [handlebars](https://
 **Example Template**
 
 ```ts
-  static getTemplate001 = async () => {
+  static getTemplate001 = () => {
     const subject = `My Subject Line`
     // Compile the template
     const template = loadviewfromfile('template_001.mjml')
@@ -71,5 +71,5 @@ service.singleEmail = 'test@test.com'
 service.smallBatch = ['test@test.com']
 // Intended for amounts over 1000
 service.largeBatch = ['test@test.com']
-service.send('dev', await EmailTemplates.getTemplate001())
+service.send('dev', EmailTemplates.getTemplate001())
 ```
